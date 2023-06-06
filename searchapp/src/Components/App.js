@@ -49,7 +49,7 @@ class App extends Component {
       const spChecked =  this.state.isSharepointChecked
       if (confChecked || spChecked) {
          setTimeout(() => {
-            this.setState({ isLoading: false });
+            this.setState({ isLoading: true });
             this.setState({ showTabs: true });
           }, 3000);
       
