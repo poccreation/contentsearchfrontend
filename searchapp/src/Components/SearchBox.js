@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef} from 'react';
 
-const SearchBox = ({ value, onChange}) => {
+const SearchBox = ({ value, onInputChange }) => {
 
   const inputRef = useRef(null);
 
@@ -9,7 +9,7 @@ const SearchBox = ({ value, onChange}) => {
   }, []);
 
   const handleChange = (event) => {
-    onChange(event.target.value);
+    onInputChange(event.target.value);
   };
     return (
       <div>

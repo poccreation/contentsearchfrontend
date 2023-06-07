@@ -9,7 +9,7 @@ import '../style.css';
 import Footer from './Footer';
 import Header from './Header';
 import Spinner from './Spinner';
-
+import ApiService from '../service/ApiService';
 
 class App extends Component {
 
@@ -24,10 +24,10 @@ class App extends Component {
          isLoading: false,
          setLoading: false,
          searchText:'',
-         tabContent: {
-            confTabContent: 'Content for Confluence Tab',
-            spTabContent: 'Content for Sharepoint Tab',
-          }
+         confResult:[],
+         spResult:[],
+         tabs : [{ id: 'confluenceTab', label: 'Confluence', content:[] },
+                 { id: 'sharepointTab', label: 'Sharepoint', content:[] }]
        };
    
    }
@@ -44,43 +44,61 @@ class App extends Component {
       }));
     };
 
-    handleSearchBoxChange =() => 
-    {
+    handleInputChange = (value) => {
       this.setState(() => ({
-         searchText: this.searchText
+         searchText : value
       }));
-    }
+      
+    };
+
+    fetchConfluenceData = async () => {
+      try {
+        const confApiResponse = await ApiService.search(this.state.searchText);
+        this.setState({ confResult: confApiResponse.data.response });
+        console.log('Confluence Data in state :', this.state.confResult);
+        this.updateContent('confluenceTab', this.state.confResult)
+        this.setState({isLoading:false});
+        this.setState({showTabs:true});
+      } catch (error) {
+        console.error('Error fetching confluence data:', error);
+      }
+    };
+
+    updateContent = (id, newContent) => {
+      // Create a new array by mapping over the existing array
+      const updatedData = this.state.tabs.map(item => {
+        if (item.id === id) {
+          // Create a new object with the updated name
+          return { ...item, content: newContent };
+        }
+        return item;
+      });
+      // Update the state with the new array
+      this.setState({ tabs: updatedData });
+
+    };
 
    handleClick = () => {
       const confChecked =  this.state.isConfChecked
       const spChecked =  this.state.isSharepointChecked
-
       if (confChecked || spChecked) {
-         this.setState({isLoading:true})
+         this.setState({isLoading:true});
+         this.fetchConfluenceData();
       }
-      
-      setTimeout(() => {
-            this.setState({ showTabs: true });
-            this.setState({ isLoading: false });
-          }, 9000);
-
+    
     };
 
 
    render () {
-      const { isSharepointChecked, isConfChecked, showTabs, isLoading, tabContent } = this.state;
-      const tabs = [
-         { id: 'confluenceTab', label: 'Confluence', content: '' },
-         { id: 'sharepointTab', label: 'Sharepoint', content: '' },
-       ];
+      const { isSharepointChecked, isConfChecked, showTabs, isLoading,  confResult, tabs} = this.state;
    
       return (
-         <div className="container">
+         <div >
             {isLoading ? <Spinner isLoading={isLoading} />:(
             <div className='main-content'>
                <Header /><br />
                <Boogle class="form-control form-control-lg" text="Boogle!" style={{ fontSize :'80px', fontFamily: 'Brush Script MT'}} />
-               <SearchBox value={this.searchText} onChange={this.handleSearchBoxChange}/>
+               <SearchBox value={this.searchText}  onInputChange={this.handleInputChange} />
                <div className="row mt-2">
                   <div className="col-md-4"/>
                   <div className="col-md-5"> 
@@ -92,7 +110,7 @@ class App extends Component {
                   </div>
                   <div className="col-md-3"/>
                </div><br />
-               {showTabs && ( <Tab tabs={tabs} content={tabContent} defaultTab="confluenceTab" />)}
+               {showTabs && ( <Tab tabs={tabs}  defaultTab="confluenceTab" />)}
                <Footer />
          </div>
             )}
