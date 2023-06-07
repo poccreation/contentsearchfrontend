@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Tabcontent = ({ index, title, path, parentPagePath, summary, parentPageName }) => {
+const Tabcontent = ({ index, title, path, parentPagePath, summary, parentPageName, lastModifiedDate }) => {
 
     return (
       <div>
@@ -9,7 +9,7 @@ const Tabcontent = ({ index, title, path, parentPagePath, summary, parentPageNam
                 <div key={index}>
                     <p>  {title} <br />
                     <a href={path} target="_blank" rel="noopener noreferrer">{title}</a><br />
-                    <span>{summary}</span>
+                    <span>{lastModifiedDate}</span><span>{summary}</span>
                     <a href={parentPagePath} target="_blank" rel="noopener noreferrer">{parentPageName}</a><br />
                     </p>
                 </div>

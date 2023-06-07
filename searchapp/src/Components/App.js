@@ -24,8 +24,6 @@ class App extends Component {
          isLoading: false,
          setLoading: false,
          searchText:'',
-         confResult:[],
-         spResult:[],
          tabs : [{ id: 'confluenceTab', label: 'Confluence', content:[] },
                  { id: 'sharepointTab', label: 'Sharepoint', content:[] }]
        };
@@ -54,7 +52,7 @@ class App extends Component {
     fetchConfluenceData = async () => {
       try {
         const confApiResponse = await ApiService.search(this.state.searchText);
-        this.setState({ confResult: confApiResponse.data.response });
+        this.setState({ confResult: confApiResponse.data });
         console.log('Confluence Data in state :', this.state.confResult);
         this.updateContent('confluenceTab', this.state.confResult)
         this.setState({isLoading:false});
@@ -90,7 +88,7 @@ class App extends Component {
 
 
    render () {
-      const { isSharepointChecked, isConfChecked, showTabs, isLoading,  confResult, tabs} = this.state;
+      const { isSharepointChecked, isConfChecked, showTabs, isLoading,  tabs} = this.state;
    
       return (
          <div >

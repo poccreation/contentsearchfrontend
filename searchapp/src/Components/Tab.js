@@ -32,7 +32,7 @@ const Tab = ({ tabs, defaultTab }) => {
                  {
                   tab.content.map((result, index) => (
                     <Tabcontent key={index} title={result.title} path={result.path} parentPagePath={result.parentPagePath} summary={result.summary} 
-                    parentPageName={result.parentPageName} />
+                    parentPageName={result.parentPageName} lastModifiedDate= {result.lastModifiedDate} />
                   ))
                    
                  }
