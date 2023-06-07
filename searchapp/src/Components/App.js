@@ -23,6 +23,7 @@ class App extends Component {
          showTabs:false,
          isLoading: false,
          setLoading: false,
+         searchText:'',
          tabContent: {
             confTabContent: 'Content for Confluence Tab',
             spTabContent: 'Content for Sharepoint Tab',
@@ -30,7 +31,7 @@ class App extends Component {
        };
    
    }
-
+   
    handleSharePointCheckboxChange = () => {
       this.setState((prevState) => ({
          isSharepointChecked: !prevState.isSharepointChecked
@@ -43,18 +44,25 @@ class App extends Component {
       }));
     };
 
+    handleSearchBoxChange =() => 
+    {
+      this.setState(() => ({
+         searchText: this.searchText
+      }));
+    }
+
    handleClick = () => {
-      this.setState({ isLoading: true });
       const confChecked =  this.state.isConfChecked
       const spChecked =  this.state.isSharepointChecked
+
       if (confChecked || spChecked) {
-         setTimeout(() => {
-            this.setState({ isLoading: true });
-            this.setState({ showTabs: true });
-          }, 3000);
-      
+         this.setState({isLoading:true})
       }
-     
+      
+      setTimeout(() => {
+            this.setState({ showTabs: true });
+            this.setState({ isLoading: false });
+          }, 9000);
 
     };
 
@@ -67,10 +75,12 @@ class App extends Component {
        ];
    
       return (
-         <div>
+         <div className="container">
+            {isLoading ? <Spinner isLoading={isLoading} />:(
+            <div className='main-content'>
                <Header /><br />
                <Boogle class="form-control form-control-lg" text="Boogle!" style={{ fontSize :'80px', fontFamily: 'Brush Script MT'}} />
-               <SearchBox />
+               <SearchBox value={this.searchText} onChange={this.handleSearchBoxChange}/>
                <div className="row mt-2">
                   <div className="col-md-4"/>
                   <div className="col-md-5"> 
@@ -82,11 +92,11 @@ class App extends Component {
                   </div>
                   <div className="col-md-3"/>
                </div><br />
-               {isLoading  &&  <Spinner isLoading={isLoading} /> }
                {showTabs && ( <Tab tabs={tabs} content={tabContent} defaultTab="confluenceTab" />)}
                <Footer />
          </div>
-          
+            )}
+           </div>
       );
 }
 }

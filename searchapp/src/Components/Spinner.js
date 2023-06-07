@@ -8,7 +8,7 @@ const Spinner = ({ loading }) => {
    margin-top: 20vh;
    `;
   return (
-   <div data-testid="spinner">
+   <div data-testid="spinner" className="spinner-div">
     <ClockLoader
      css={override}
      size={80}
