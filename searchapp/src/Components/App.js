@@ -9,7 +9,7 @@ import "../style.css";
 import Footer from "./Footer";
 import Header from "./Header";
 import Spinner from "./Spinner";
-import ApiService from "../service/ApiService";
+import apiService from '../service/ApiService';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -26,8 +26,8 @@ class App extends Component {
       searchText: "",
       searchTextSubmitted: "",
       tabs: [
-        { id: "confluenceTab", label: "Confluence", content: [] },
-        { id: "sharepointTab", label: "Sharepoint", content: [] },
+        { id: "confluenceTab", label: "Confluence", content: [], message:'' },
+        { id: "sharepointTab", label: "Sharepoint", content: [], message:'' },
       ],
     };
   }
@@ -50,25 +50,41 @@ class App extends Component {
     }));
   };
 
-  fetchConfluenceData = async () => {
+  fetchConfluenceData = async (confChecked, spChecked) => {
+    let tabs = [];
     try {
-      const confApiResponse = await ApiService.search(this.state.searchText);
-      console.log(confApiResponse);
-      this.setState({ isLoading: false });
-      if (
-        !confApiResponse ||
-        !confApiResponse.data.queryResponses ||
-        confApiResponse.data.queryResponses.length <= 0
-      ) {
-        toast.success("No Data Found");
-        return;
+      this.setState({ isLoading: true });
+      var confApiResponse = '';
+      var spApiResponse = '';
+      if (confChecked) {
+        confApiResponse = await apiService.search(this.state.searchText);
+        if (!confApiResponse.data || confApiResponse.data.length === 0) {
+          let tab = { id: "confluenceTab", label: "Confluence", content: [], message:'' }
+          tab.message = 'No Result Found!'
+          tabs.push(tab);
+        } else {
+          let tab = { id: "confluenceTab", label: "Confluence", content: [], message:'' }
+          tab.content = confApiResponse.data.queryResponses;    
+          tabs.push(tab); 
+        }
       }
-      this.setState({ confResult: confApiResponse.data.queryResponses });
-      console.log("Confluence Data in state :", this.state.confResult);
-      this.updateContent("confluenceTab", this.state.confResult);
+      if (spChecked) {
+        spApiResponse = await apiService.sharePointSearch(this.state.searchText);
+        if (!spApiResponse.data || spApiResponse.data.length === 0) {
+          let tab = { id: "sharepointTab", label: "Sharepoint", content: [], message:'' }
+          tab.message = 'No Result Found!'
+          tabs.push(tab);
+        } else {
+          let tab = { id: "sharepointTab", label: "Sharepoint", content: [], message:'' }
+          tab.content = spApiResponse.data.queryResponses;   
+          tabs.push(tab);
+        }
+      } 
       this.setState({
+        isLoading: false,
         showTabs: true,
         searchTextSubmitted: this.state.searchText,
+        tabs: tabs
       });
     } catch (error) {
       this.setState({ isLoading: false });
@@ -76,38 +92,28 @@ class App extends Component {
     }
   };
 
-  updateContent = (id, newContent) => {
-    // Create a new array by mapping over the existing array
-    const updatedData = this.state.tabs.map((item) => {
-      if (item.id === id) {
-        // Create a new object with the updated name
-        return { ...item, content: newContent };
-      }
-      return item;
-    });
-    // Update the state with the new array
-    this.setState({ tabs: updatedData });
-  };
-
+ 
   handleClick = () => {
     this.setState({
       showTabs: false,
       tabs: [
-        { id: "confluenceTab", label: "Confluence", content: [] },
-        { id: "sharepointTab", label: "Sharepoint", content: [] },
+        { id: "confluenceTab", label: "Confluence", content: [], message:'' },
+        { id: "sharepointTab", label: "Sharepoint", content: [], message:'' },
       ],
     });
+    if (this.state.searchText == null || this.state.searchText.trim() === '') {
+      this.setState({isLoading:false});
+      return;
+     } 
     const confChecked = this.state.isConfChecked;
     const spChecked = this.state.isSharepointChecked;
     if (confChecked || spChecked) {
-      this.setState({ isLoading: true });
-      this.fetchConfluenceData();
+      this.fetchConfluenceData(confChecked, spChecked);
     }
   };
 
   render() {
-    const { isSharepointChecked, isConfChecked, showTabs, isLoading, tabs } =
-      this.state;
+    const { isSharepointChecked, isConfChecked, showTabs, isLoading, tabs } = this.state;
     return (
       <div>
         <ToastContainer
@@ -157,12 +163,7 @@ class App extends Component {
               <div className="col-md-3" />
             </div>
             <br />
-            {showTabs && (
-              <Tab
-                tabs={tabs}
-                defaultTab="confluenceTab"
-                searchText={this.state.searchTextSubmitted}
-              />
+            {showTabs && (<Tab tabs={tabs} defaultTab="confluenceTab" searchText={this.state.searchTextSubmitted} />
             )}
             <Footer />
           </div>

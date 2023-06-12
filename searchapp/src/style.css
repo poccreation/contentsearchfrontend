@@ -68,7 +68,5 @@ footer {
   }
   
 .tab-content {
-  flex-grow: 1;
-  overflow-y: auto;
   margin-bottom: 100px;
 }

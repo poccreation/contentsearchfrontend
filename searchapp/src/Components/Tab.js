@@ -26,20 +26,18 @@ const Tab = ({ tabs, defaultTab, searchText }) => {
           </ul>
 
           <div className="tab-content">
+          
             {tabs.map((tab) => (
-              <div
-                key={tab.id}
-                className={`tab-pane fade ${
-                  activeTab === tab.id ? "show active" : ""
-                }`}
-              >
-                {tab.content.map((result, index) => (
-                  <Tabcontent
-                    key={index}
-                    content={result}
-                    searchText={searchText}
-                  />
-                ))}
+              <div  key={tab.id} className={`tab-pane fade ${activeTab === tab.id ? "show active" : ""}`}>
+                {tab.content.length === 0 ? <div> <span>{tab.message} </span> </div> :   
+                <div>   {tab.content.map((result, index) => (
+                      <Tabcontent
+                        key={index}
+                        content={result}
+                        searchText={searchText}
+                      />
+                    ))}
+                </div> }
               </div>
             ))}
           </div>

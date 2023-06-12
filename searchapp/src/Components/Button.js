@@ -4,7 +4,7 @@ const Button = ({ caption, onClick }) => {
   return (
     <button
       class="btn btn-primary"
-      style={{ marginLeft: "380px" }}
+      style={{ marginLeft: "336px" }}
       onClick={onClick}
     >
       {caption}

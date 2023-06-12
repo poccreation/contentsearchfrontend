@@ -6,8 +6,26 @@ class ApiService {
     return axios.get(
       API_BASE_URL + "confluence/search?query=" + data + "&page=1&size=9"
     );
-    //return  axios.get('http://localhost:9080/boogle/v1/confluence/search?query=Transformers&page=1&size=9');
   }
+
+  sharePointSearch(data) {
+    return axios.get(
+      API_BASE_URL + "sharepoint/graphql/search?query=" + data + "&page=1&size=9"
+    );
+  }
+
+  updateContent = (id, tabArr, newContent) => {
+    if (newContent || newContent.length === 0) {
+       return 'No results found!'
+    }
+    const updatedData = tabArr.map(item => {
+      if (item.id === id) {
+        return { ...item, content: newContent };
+      }
+      return item;
+    });
+    return updatedData;
+  };
 }
 
 const apiService = new ApiService();
