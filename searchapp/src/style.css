@@ -3,6 +3,7 @@ footer {
   height: 80px;
   bottom: 0;
   width: 100%;
+  Z-index: -1
 }
 
 .spinner-div{ 
@@ -11,4 +12,63 @@ footer {
   left:50%;
   transform: translate(-50%,-50%);
 }
+.path {
+  color: var(--ds-link-pressed,#0052cc);
+  font-size:14px
+  }
+  .path:hover
+  {
+    text-decoration: underline; /* Underline on hover */
+    color: var(--ds-link-pressed,#0052cc);
+    font-size:14px
+  }
+
+  a {
+    text-decoration: none; /* Remove default underline */
+    cursor: pointer; /* Set cursor to pointer */
+  }
   
+  .basePath:hover {
+    text-decoration: underline; /* Underline on hover */
+    color: var(--ds-text, #5E6C84);
+    font-size:11px
+  }
+  
+  .basePath{
+   color: var(--ds-text, #5E6C84);
+   font-size:11px
+  }
+  label{
+    color: var(--ds-text, #5E6C84);
+    text-align: center;
+    font-size:11px
+  }
+  .left-buffer-2{
+    padding-left: 2px;
+  }
+  
+  .top-buffer-2{
+    padding-top: 2px;
+  }
+  .left-buffer-30{
+    padding-left: 30px;
+  }
+  
+  .top-buffer-20{
+    padding-top: 20px;
+  }
+  
+  
+  .bottom-buffer-2{
+    margin-bottom: 10px;
+  }
+  
+  .paragraph{
+    font-size: 14px;
+  }
+  
+.tab-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 100px;
+}

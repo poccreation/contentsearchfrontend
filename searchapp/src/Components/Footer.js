@@ -1,16 +1,16 @@
-import { Container} from 'react-bootstrap';
-import '../style.css';
+import { Container } from "react-bootstrap";
+import "../style.css";
 
 const Footer = () => {
-    return (
-      <div>
-        <footer className="fixed-bottom mt-auto py-3 bg-light text-center">
-          <Container>
-            <p>© 2023 Search App. All rights reserved.</p>
-          </Container>
-        </footer>
+  return (
+    <div>
+      <footer className="fixed-bottom mt-auto py-3 bg-light text-center">
+        <Container>
+          <p>© 2023 Search App. All rights reserved.</p>
+        </Container>
+      </footer>
     </div>
-    );
-  };
+  );
+};
 
-  export default Footer;
+export default Footer;
