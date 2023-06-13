@@ -2,6 +2,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../Constants/Constants";
 
 class ApiService {
+  
   search(data) {
     return axios.get(
       API_BASE_URL + "confluence/search?query=" + data + "&page=1&size=9"

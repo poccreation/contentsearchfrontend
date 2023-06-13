@@ -54,37 +54,34 @@ class App extends Component {
     let tabs = [];
     try {
       this.setState({ isLoading: true });
-      var confApiResponse = '';
-      var spApiResponse = '';
+      let tab = { id: "confluenceTab", label: "Confluence", content: [], message:'' }
+      let sptab = { id: "sharepointTab", label: "Sharepoint", content: [], message:'' }
       if (confChecked) {
-        confApiResponse = await apiService.search(this.state.searchText);
+        var confApiResponse = await  apiService.search(this.state.searchText);
         if (!confApiResponse.data || confApiResponse.data.length === 0) {
-          let tab = { id: "confluenceTab", label: "Confluence", content: [], message:'' }
           tab.message = 'No Result Found!'
           tabs.push(tab);
         } else {
-          let tab = { id: "confluenceTab", label: "Confluence", content: [], message:'' }
           tab.content = confApiResponse.data.queryResponses;    
           tabs.push(tab); 
         }
       }
       if (spChecked) {
-        spApiResponse = await apiService.sharePointSearch(this.state.searchText);
+        var spApiResponse = await apiService.sharePointSearch(this.state.searchText);
         if (!spApiResponse.data || spApiResponse.data.length === 0) {
-          let tab = { id: "sharepointTab", label: "Sharepoint", content: [], message:'' }
-          tab.message = 'No Result Found!'
-          tabs.push(tab);
+          sptab.message = 'No Result Found!'
+          tabs.push(sptab);
         } else {
-          let tab = { id: "sharepointTab", label: "Sharepoint", content: [], message:'' }
-          tab.content = spApiResponse.data.queryResponses;   
-          tabs.push(tab);
+          sptab.content = spApiResponse.data.queryResponses;   
+          tabs.push(sptab);
         }
       } 
       this.setState({
         isLoading: false,
         showTabs: true,
         searchTextSubmitted: this.state.searchText,
-        tabs: tabs
+        tabs: tabs,
+        searchText:""
       });
     } catch (error) {
       this.setState({ isLoading: false });
@@ -136,8 +133,7 @@ class App extends Component {
             <br />
             <Boogle
               class="form-control form-control-lg"
-              text="Boogle!"
-              style={{ fontSize: "80px", fontFamily: "Brush Script MT" }}
+              style={{ fontSize: "130px", fontFamily: "Brush Script MT" }}
             />
             <SearchBox
               value={this.searchText}
