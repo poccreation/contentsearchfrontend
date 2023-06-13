@@ -12,11 +12,13 @@ import Spinner from "./Spinner";
 import ApiService from "../service/ApiService";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { CONFLUENCE_LIMIT } from "../Constants/Constants";
 
 class App extends Component {
   constructor() {
     super();
     this.handleClick = this.handleClick.bind(this);
+    this.loadMore = this.loadMore.bind(this);
     this.state = {
       isSharepointChecked: true,
       isConfChecked: true,
@@ -25,10 +27,12 @@ class App extends Component {
       setLoading: false,
       searchText: "",
       searchTextSubmitted: "",
+      confResult: [],
       tabs: [
         { id: "confluenceTab", label: "Confluence", content: [] },
         { id: "sharepointTab", label: "Sharepoint", content: [] },
       ],
+      nextLink: null,
     };
   }
 
@@ -52,7 +56,9 @@ class App extends Component {
 
   fetchConfluenceData = async () => {
     try {
-      const confApiResponse = await ApiService.search(this.state.searchText);
+      const confApiResponse = await ApiService.search(
+        this.createSearchRequest(this.state.searchText, null)
+      );
       console.log(confApiResponse);
       this.setState({ isLoading: false });
       if (
@@ -66,9 +72,11 @@ class App extends Component {
       this.setState({ confResult: confApiResponse.data.queryResponses });
       console.log("Confluence Data in state :", this.state.confResult);
       this.updateContent("confluenceTab", this.state.confResult);
+      console.log(confApiResponse.data.next);
       this.setState({
         showTabs: true,
         searchTextSubmitted: this.state.searchText,
+        nextLink: confApiResponse.data.next,
       });
     } catch (error) {
       this.setState({ isLoading: false });
@@ -96,12 +104,50 @@ class App extends Component {
         { id: "confluenceTab", label: "Confluence", content: [] },
         { id: "sharepointTab", label: "Sharepoint", content: [] },
       ],
+      confResult: [],
+      nextLink: null,
     });
     const confChecked = this.state.isConfChecked;
     const spChecked = this.state.isSharepointChecked;
     if (confChecked || spChecked) {
       this.setState({ isLoading: true });
       this.fetchConfluenceData();
+    }
+  };
+
+  createSearchRequest = (searchText, nextLink) => {
+    let searchRequest = {
+      page: 1,
+      size: CONFLUENCE_LIMIT,
+      searchQuery: searchText,
+      nextLink: nextLink,
+    };
+    return searchRequest;
+  };
+
+  loadMore = async () => {
+    let data = [];
+    try {
+      const confApiResponse = await ApiService.search(
+        this.createSearchRequest(this.state.searchText, this.state.nextLink)
+      );
+      if (
+        !confApiResponse ||
+        !confApiResponse.data.queryResponses ||
+        confApiResponse.data.queryResponses.length <= 0
+      ) {
+        return;
+      }
+
+      data = [...this.state.confResult, ...confApiResponse.data.queryResponses];
+      this.updateContent("confluenceTab", data);
+      this.setState({
+        confResult: data,
+        nextLink: confApiResponse.data.next,
+      });
+    } catch (error) {
+      this.setState({ isLoading: false });
+      toast.error("Something went wrong, please try again later.");
     }
   };
 
@@ -164,6 +210,11 @@ class App extends Component {
                 searchText={this.state.searchTextSubmitted}
               />
             )}
+            {this.state.nextLink != null ? (
+              <div className="LoadMore">
+                <Buttonc caption="Load More" onClick={this.loadMore} />
+              </div>
+            ) : null}
             <Footer />
           </div>
         )}
