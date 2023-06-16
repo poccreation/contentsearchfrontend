@@ -70,3 +70,14 @@ footer {
 .tab-content {
   margin-bottom: 100px;
 }
+
+.width620 {
+  width:620px;
+}
+
+.customAlert {
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}

@@ -21,15 +21,9 @@ const Tabcontent = ({ index, content, searchText }) => {
         <div className="row">
           <div className="col-xs-12">
             <span>
-              {" "}
-              <a
-                href={content.parentPagePath}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="basePath"
-              >
-                {content.parentPageName}
-              </a>
+                <label>
+                  {content.parentPageName}
+                </label>
               <label>{DOT}</label>
               <label>{setText(content.document)}</label>
               <label className="left-buffer-2">
@@ -44,13 +38,19 @@ const Tabcontent = ({ index, content, searchText }) => {
           </span>
         </div>
       </span>
+      <br />       <br />       <br />
     </div>
   );
 };
+
+
 const response = (text, query) => {
   if (text || text.length > 0) {
     const words = text.split(" ");
-    const formattedResponse = words.map((word, index) => {
+    const croppedWords = words.slice(0, 200);
+    const newText = croppedWords.join(' ') + " ....";
+    const wordval = newText.split(" ");
+    const formattedResponse = wordval.map((word, index) => {
       const isMatch = word.toLowerCase().includes(query.toLowerCase());
       return isMatch ? <strong key={index}>{word} </strong> : `${word} `;
     });
