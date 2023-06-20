@@ -25,11 +25,10 @@ const Tab = ({ tabs, defaultTab, searchText }) => {
             ))}
           </ul>
 
-          <div className="tab-content">
-          
+          <div className="tab-content">   
             {tabs.map((tab) => (
               <div  key={tab.id} className={`tab-pane fade ${activeTab === tab.id ? "show active" : ""}`}>
-                {tab.content.length === 0 ? <div> <span>{tab.message} </span> </div> :   
+                {tab.content.length === 0 ? <div className="noResultMessage"> <span><b>{tab.message} </b></span> </div> :   
                 <div>   {tab.content.map((result, index) => (
                       <Tabcontent
                         key={index}
@@ -37,7 +36,8 @@ const Tab = ({ tabs, defaultTab, searchText }) => {
                         searchText={searchText}
                       />
                     ))}
-                </div> }
+                </div> 
+                }
               </div>
             ))}
           </div>

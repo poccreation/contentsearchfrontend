@@ -61,7 +61,7 @@ class App extends Component {
       let sptab = { id: "sharepointTab", label: "Sharepoint", content: [], message:'' }
       if (confChecked) {
         var confApiResponse = await  apiService.search(this.state.searchText);
-        if (!confApiResponse.data || confApiResponse.data.length === 0) {
+        if (!confApiResponse.data || confApiResponse.data.queryResponses.length === 0) {
           tab.message = 'No Result Found!'
           tabs.push(tab);
         } else {
@@ -74,7 +74,7 @@ class App extends Component {
           this.setState({defaultTab :"sharepointTab"});
         }
         var spApiResponse = await apiService.sharePointSearch(this.state.searchText);
-        if (!spApiResponse.data || spApiResponse.data.length === 0) {
+        if (!spApiResponse.data || spApiResponse.data.queryResponses.length === 0) {
           sptab.message = 'No Result Found!'
           tabs.push(sptab);
         } else {

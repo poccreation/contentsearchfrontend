@@ -4,7 +4,7 @@ import { DOT } from "../Constants/Constants";
 const Tabcontent = ({ index, content, searchText }) => {
   console.log(searchText);
   return (
-    <div className="row left-buffer-30 top-buffer-20" key={index}>
+    <div className="row left-buffer-30 top-buffer-20 paddingDown20" key={index}>
       <span>
         <div className="row">
           <span>
@@ -38,7 +38,6 @@ const Tabcontent = ({ index, content, searchText }) => {
           </span>
         </div>
       </span>
-      <br />       <br />       <br />
     </div>
   );
 };
@@ -46,9 +45,12 @@ const Tabcontent = ({ index, content, searchText }) => {
 
 const response = (text, query) => {
   if (text || text.length > 0) {
-    const words = text.split(" ");
-    const croppedWords = words.slice(0, 200);
-    const newText = croppedWords.join(' ') + " ....";
+    var newText = text;
+    if (text.length > 120) {
+      const words = text.split(" ");
+      const croppedWords = words.slice(0, 120);
+      newText = croppedWords.join(' ') + " ....";
+    }
     const wordval = newText.split(" ");
     const formattedResponse = wordval.map((word, index) => {
       const isMatch = word.toLowerCase().includes(query.toLowerCase());
