@@ -87,7 +87,7 @@ class App extends Component {
         showTabs: true,
         searchTextSubmitted: this.state.searchText,
         tabs: tabs,
-        searchText:""
+        searchText: this.state.searchText
       });
     } catch (error) {
       this.setState({ isLoading: false, showAlert:true, errorMessage: "Something went wrong, please try again later!"});
@@ -121,7 +121,7 @@ class App extends Component {
   };
 
   render() {
-    const { isSharepointChecked, isConfChecked, showTabs, isLoading, tabs, defaultTab, errorMessage, showAlert } = this.state;
+    const { isSharepointChecked, isConfChecked, showTabs, isLoading, tabs, defaultTab, errorMessage, showAlert, searchText } = this.state;
     return (
       <div>
         {isLoading ? (
@@ -135,7 +135,7 @@ class App extends Component {
               class="form-control form-control-lg"
               style={{ fontSize: "130px", fontFamily: "Brush Script MT" }}
             />
-            <SearchBox value={this.searchText} onInputChange={this.handleInputChange} />
+            <SearchBox value={searchText} onInputChange={this.handleInputChange} />
             <div className="row mt-2">
               <div className="col-md-4" />
               <div className="col-md-5">

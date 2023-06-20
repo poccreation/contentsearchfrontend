@@ -14,7 +14,7 @@ const Tabcontent = ({ index, content, searchText }) => {
               rel="noopener noreferrer"
               className="path"
             >
-              {response(content.title, searchText)}
+              {content.title}
             </a>
           </span>
         </div>
