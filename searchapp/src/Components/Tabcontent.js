@@ -21,9 +21,7 @@ const Tabcontent = ({ index, content, searchText }) => {
         <div className="row">
           <div className="col-xs-12">
             <span>
-                <label>
-                  {content.parentPageName}
-                </label>
+              <label>{content.parentPageName}</label>
               <label>{DOT}</label>
               <label>{setText(content.document)}</label>
               <label className="left-buffer-2">
@@ -42,24 +40,30 @@ const Tabcontent = ({ index, content, searchText }) => {
   );
 };
 
-
 const response = (text, query) => {
   if (text || text.length > 0) {
     var newText = text;
     if (text.length > 120) {
       const words = text.split(" ");
       const croppedWords = words.slice(0, 120);
-      newText = croppedWords.join(' ') + " ....";
+      newText = croppedWords.join(" ") + " ....";
     }
-    const wordval = newText.split(" ");
-    const formattedResponse = wordval.map((word, index) => {
-      const isMatch = word.toLowerCase().includes(query.toLowerCase());
-      return isMatch ? <strong key={index}>{word} </strong> : `${word} `;
-    });
-    return <span>{formattedResponse}</span>;
+
+    const parts = newText.split(new RegExp(`(${query})`, "gi"));
+    return (
+      <span>
+        {parts.map((word) =>
+          word.toLowerCase() === query.toLowerCase() ? (
+            <strong>{word}</strong>
+          ) : (
+            word
+          )
+        )}
+      </span>
+    );
   }
 
-  return <span>{text}</span>;
+  return <span>{newText}</span>;
 };
 
 const setText = (isdocument) => {
